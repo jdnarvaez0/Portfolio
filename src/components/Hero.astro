@@ -1,0 +1,37 @@
+---
+/**
+ * Hero - Presentation section with name and bio
+ */
+import { getLangFromUrl, t } from "../i18n/translations";
+
+const lang = getLangFromUrl(Astro.url);
+---
+
+<section class="hero">
+  <p class="hero-text">
+    {t(lang, "hero.greeting")}
+    <strong class="hero-name">{t(lang, "hero.name")}</strong>, {
+      t(lang, "hero.description")
+    }
+  </p>
+</section>
+
+<style>
+  .hero {
+    padding: 2rem 0 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-text {
+    font-size: 1rem;
+    line-height: 2;
+    color: var(--text-secondary);
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .hero-name {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+</style>

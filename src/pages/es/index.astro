@@ -1,0 +1,158 @@
+---
+/**
+ * Home Page - Spanish
+ */
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Hero from "../../components/Hero.astro";
+import ProjectCard from "../../components/ProjectCard.astro";
+import ExperienceCard from "../../components/ExperienceCard.astro";
+import PostCard from "../../components/PostCard.astro";
+import { t } from "../../i18n/translations";
+
+const lang = "es";
+
+// Get blog posts
+const posts = await getCollection("blog", ({ data }) => {
+  return data.lang === lang && !data.draft;
+});
+const sortedPosts = posts.sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+import { icons } from "../../lib/icons";
+
+// Projects data
+const projects = [
+  {
+    name: "Gastiflow",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`,
+    description:
+      "Ecosistema de finanzas personales con integración de Telegram y análisis con IA.",
+    github: "https://github.com/jdnarvaez0/gastiflow",
+    url: "https://gastiflow.vercel.app",
+    tags: [
+      { name: "Python", icon: icons.python },
+      { name: "FastAPI", icon: icons.fastapi },
+      { name: "Nuxt 3", icon: icons.vue },
+    ],
+    updated: true,
+  },
+  {
+    name: "FarmaSpot",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 5.25-7 13-7 13S5 14.25 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="3"/></svg>`,
+    description:
+      "Rastreador de farmacias de turno en tiempo real para Argentina con geolocalización.",
+    github: "https://github.com/jdnarvaez0/FarmaSpot",
+    tags: [
+      { name: "Next.js", icon: icons.nextjs },
+      { name: "Java", icon: icons.java },
+      { name: "Spring Boot", icon: icons.springboot },
+    ],
+  },
+];
+
+// Experience data
+const experiences = [
+  {
+    startYear: "2024",
+    endYear: t(lang, "experience.present"),
+    title: t(lang, "experience.ataway.title"),
+    company: t(lang, "experience.ataway.company"),
+    description: t(lang, "experience.ataway.description"),
+  },
+  {
+    startYear: "2022",
+    endYear: t(lang, "experience.present"),
+    title: t(lang, "experience.integrations.title"),
+    company: t(lang, "experience.integrations.company"),
+    description: t(lang, "experience.integrations.description"),
+  },
+  {
+    startYear: "2021",
+    endYear: t(lang, "experience.present"),
+    title: t(lang, "experience.coderhouse.title"),
+    company: t(lang, "experience.coderhouse.company"),
+    description: t(lang, "experience.coderhouse.description"),
+  },
+];
+---
+
+<BaseLayout
+  title="Juan Narvaez | Software Engineer"
+  description="Juan Narvaez - Software Engineer de Buenos Aires, Argentina"
+  lang={lang}
+>
+  <Header />
+
+  <main class="container">
+    <!-- Hero Section -->
+    <Hero />
+
+    <!-- Projects Section -->
+    <section id="projects">
+      <div class="section-header">
+        <h2 class="section-title">{t(lang, "sections.projects")}</h2>
+      </div>
+
+      <div class="grid-2">
+        {projects.map((project) => <ProjectCard {...project} />)}
+      </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience">
+      <div class="section-header">
+        <h2 class="section-title">{t(lang, "sections.experience")}</h2>
+      </div>
+
+      <div class="experience-list">
+        {experiences.map((exp) => <ExperienceCard {...exp} />)}
+      </div>
+    </section>
+
+    <!-- Posts Section -->
+    <section id="posts">
+      <div class="section-header">
+        <h2 class="section-title">{t(lang, "sections.posts")}</h2>
+      </div>
+
+      <div class="posts-list">
+        {
+          sortedPosts.map((post) => (
+            <PostCard
+              title={post.data.title}
+              description={post.data.description}
+              date={post.data.date}
+              slug={post.id.replace(".md", "")}
+              tags={post.data.tags}
+              lang={lang}
+            />
+          ))
+        }
+      </div>
+
+      {
+        sortedPosts.length === 0 && (
+          <p class="text-muted text-sm">
+            Aún no hay publicaciones. ¡Vuelve pronto!
+          </p>
+        )
+      }
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .experience-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+</style>

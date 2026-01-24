@@ -1,0 +1,123 @@
+---
+/**
+ * ExperienceCard - Timeline-style experience display
+ */
+interface Props {
+  startYear: string;
+  endYear?: string;
+  title: string;
+  company: string;
+  companyUrl?: string;
+  description: string;
+}
+
+const { startYear, endYear, title, company, companyUrl, description } = Astro.props;
+---
+
+<article class="experience-card">
+  <div class="experience-timeline">
+    <div class="timeline-dot"></div>
+    <span class="experience-date">{startYear} - {endYear || 'Present'}</span>
+  </div>
+  
+  <div class="experience-content">
+    <h3 class="experience-title">{title}</h3>
+    {companyUrl ? (
+      <a href={companyUrl} target="_blank" rel="noopener noreferrer" class="experience-company external-link">
+        {company}
+      </a>
+    ) : (
+      <span class="experience-company">{company}</span>
+    )}
+    <p class="experience-description">{description}</p>
+  </div>
+</article>
+
+<style>
+  .experience-card {
+    display: flex;
+    gap: 1.5rem;
+    padding-left: 0.5rem;
+  }
+  
+  .experience-timeline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding-top: 0.25rem;
+  }
+  
+  .timeline-dot {
+    width: 10px;
+    height: 10px;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    background: var(--bg-primary);
+    flex-shrink: 0;
+  }
+  
+  .experience-date {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  
+  .experience-content {
+    flex: 1;
+    padding-bottom: 2rem;
+    border-left: 2px solid var(--border-color);
+    padding-left: 1.5rem;
+    margin-left: -1.25rem;
+  }
+  
+  .experience-card:last-child .experience-content {
+    border-left-color: transparent;
+    padding-bottom: 0;
+  }
+  
+  .experience-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+  }
+  
+  .experience-company {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    display: inline-block;
+    margin-bottom: 0.75rem;
+  }
+  
+  a.experience-company {
+    text-decoration: none;
+  }
+  
+  a.experience-company:hover {
+    color: var(--text-secondary);
+  }
+  
+  .experience-description {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 640px) {
+    .experience-card {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .experience-timeline {
+      flex-direction: row;
+    }
+    
+    .experience-content {
+      border-left: none;
+      padding-left: 0;
+      margin-left: 0;
+    }
+  }
+</style>
