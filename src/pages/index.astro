@@ -10,6 +10,7 @@ import ProjectCard from "../components/ProjectCard.astro";
 import ExperienceCard from "../components/ExperienceCard.astro";
 import PostCard from "../components/PostCard.astro";
 import { t } from "../i18n/translations";
+import { getFeaturedProjects } from "../data/projects";
 
 const lang = "en";
 
@@ -21,36 +22,8 @@ const sortedPosts = posts.sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
 );
 
-import { icons } from "../lib/icons";
-
-const projects = [
-  {
-    name: "Gastiflow",
-    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`,
-    description:
-      "Personal finance ecosystem with Telegram integration and AI-powered insights.",
-    github: "https://github.com/jdnarvaez0/gastiflow",
-    url: "https://gastiflow.vercel.app",
-    tags: [
-      { name: "Python", icon: icons.python },
-      { name: "FastAPI", icon: icons.fastapi },
-      { name: "Nuxt 3", icon: icons.vue },
-    ],
-    updated: true,
-  },
-  {
-    name: "FarmaSpot",
-    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 5.25-7 13-7 13S5 14.25 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="3"/></svg>`,
-    description:
-      "Real-time pharmacy availability tracker for Argentina with geolocation features.",
-    github: "https://github.com/jdnarvaez0/FarmaSpot",
-    tags: [
-      { name: "Next.js", icon: icons.nextjs },
-      { name: "Java", icon: icons.java },
-      { name: "Spring Boot", icon: icons.springboot },
-    ],
-  },
-];
+// Get featured projects
+const projects = getFeaturedProjects();
 
 // Experience data
 const experiences = [
@@ -89,10 +62,21 @@ const experiences = [
     <section id="projects">
       <div class="section-header">
         <h2 class="section-title">{t(lang, "sections.projects")}</h2>
+        <a href="/projects" class="section-link">{t(lang, "sections.more")}</a>
       </div>
 
       <div class="grid-2">
-        {projects.map((project) => <ProjectCard {...project} />)}
+        {projects.map((project) => (
+          <ProjectCard 
+            name={project.name}
+            emoji={project.emoji}
+            description={project.description[lang]}
+            github={project.github}
+            url={project.url}
+            tags={project.tags}
+            updated={project.updated}
+          />
+        ))}
       </div>
     </section>
 
