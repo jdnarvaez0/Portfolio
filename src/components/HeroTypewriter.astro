@@ -1,0 +1,99 @@
+---
+/**
+ * HeroTypewriter - Typewriter específico para el Hero
+ * Escribe greeting + name, con name en negrita
+ */
+interface Props {
+  greeting: string;
+  name: string;
+  speed?: number;
+  delay?: number;
+}
+
+const { greeting, name, speed = 90, delay = 200 } = Astro.props;
+
+const fullText = `${greeting} ${name}`;
+const greetingLength = greeting.length + 1; // +1 por el espacio
+---
+
+<span class="hero-typewriter" 
+  data-text={fullText} 
+  data-greeting-length={greetingLength}
+  data-speed={speed}
+  data-delay={delay}
+>
+  <span class="hero-typewriter-text"></span>
+  <span class="hero-typewriter-cursor">|</span>
+</span>
+
+<style>
+  .hero-typewriter {
+    display: inline;
+    color: var(--text-primary);
+  }
+
+  .hero-typewriter-text {
+    white-space: pre-wrap;
+  }
+
+  .hero-typewriter-cursor {
+    display: inline-block;
+    color: var(--accent);
+    animation: blink 1s step-end infinite;
+    margin-left: 1px;
+  }
+
+  .hero-typewriter-cursor.typing {
+    animation: none;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+</style>
+
+<script>
+  function initHeroTypewriters() {
+    document.querySelectorAll('.hero-typewriter').forEach(el => {
+      const htmlEl = el as HTMLElement;
+      const text = htmlEl.dataset.text || '';
+      const greetingLength = parseInt(htmlEl.dataset.greetingLength || '0');
+      const speed = parseInt(htmlEl.dataset.speed || '90');
+      const delay = parseInt(htmlEl.dataset.delay || '200');
+      const textSpan = htmlEl.querySelector('.hero-typewriter-text');
+      const cursor = htmlEl.querySelector('.hero-typewriter-cursor');
+      
+      if (!textSpan) return;
+
+      let i = 0;
+      
+      setTimeout(() => {
+        cursor?.classList.add('typing');
+        
+        const typeChar = () => {
+          if (i <= text.length) {
+            const currentText = text.substring(0, i);
+            const greetingPart = currentText.substring(0, Math.min(i, greetingLength));
+            const namePart = i > greetingLength ? currentText.substring(greetingLength) : '';
+            
+            // Usamos strong para el nombre (negrita nativa)
+            textSpan.innerHTML = 
+              `<span style="font-weight: 400;">${greetingPart}</span>` +
+              (namePart ? `<strong style="font-weight: 600;">${namePart}</strong>` : '');
+            
+            i++;
+            setTimeout(typeChar, speed);
+          } else {
+            cursor?.classList.remove('typing');
+          }
+        };
+        
+        typeChar();
+      }, delay);
+    });
+  }
+
+  initHeroTypewriters();
+  document.addEventListener('astro:page-load', initHeroTypewriters);
+</script>

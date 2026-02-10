@@ -1,0 +1,215 @@
+---
+/**
+ * Particles - Fondo con partículas tipo constelaciones
+ * Partículas que se conectan entre sí y reaccionan al mouse
+ */
+---
+
+<canvas id="particles-canvas" class="particles-canvas"></canvas>
+
+<style>
+  .particles-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+</style>
+
+<script>
+  interface Particle {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    radius: number;
+  }
+
+  const initParticles = () => {
+    const canvas = document.getElementById('particles-canvas') as HTMLCanvasElement;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Configuración
+    const config = {
+      particleCount: 25,        // Pocas partículas para ser sutiles
+      connectionDistance: 120,  // Distancia para conectar
+      mouseDistance: 150,       // Distancia de reacción al mouse
+      speed: 0.3,               // Velocidad lenta
+      radius: 1.5,              // Tamaño de partículas
+    };
+
+    let particles: Particle[] = [];
+    let mouse = { x: -1000, y: -1000 };
+    let animationId: number;
+    let isActive = true;
+
+    // Resize
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    // Crear partículas
+    const createParticles = () => {
+      particles = [];
+      for (let i = 0; i < config.particleCount; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * config.speed,
+          vy: (Math.random() - 0.5) * config.speed,
+          radius: Math.random() * 0.5 + config.radius,
+        });
+      }
+    };
+
+    // Dibujar partícula
+    const drawParticle = (p: Particle) => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#737373';
+      ctx.fill();
+    };
+
+    // Dibujar conexión
+    const drawConnection = (p1: Particle, p2: Particle, distance: number) => {
+      const opacity = (1 - distance / config.connectionDistance) * 0.3;
+      ctx.beginPath();
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+      ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#737373';
+      ctx.globalAlpha = opacity;
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    };
+
+    // Actualizar partícula
+    const updateParticle = (p: Particle) => {
+      // Movimiento base
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // Rebote en bordes
+      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+      // Mantener dentro del canvas
+      p.x = Math.max(0, Math.min(canvas.width, p.x));
+      p.y = Math.max(0, Math.min(canvas.height, p.y));
+
+      // Reacción al mouse (repulsión suave)
+      const dx = p.x - mouse.x;
+      const dy = p.y - mouse.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < config.mouseDistance) {
+        const force = (config.mouseDistance - distance) / config.mouseDistance;
+        p.x += (dx / distance) * force * 2;
+        p.y += (dy / distance) * force * 2;
+      }
+    };
+
+    // Animación
+    const animate = () => {
+      if (!isActive) return;
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Actualizar y dibujar partículas
+      particles.forEach((p, i) => {
+        updateParticle(p);
+        drawParticle(p);
+
+        // Conectar con partículas cercanas
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx = p.x - p2.x;
+          const dy = p.y - p2.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < config.connectionDistance) {
+            drawConnection(p, p2, distance);
+          }
+        }
+
+        // Conectar con mouse si está cerca
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < config.mouseDistance) {
+          const opacity = (1 - distance / config.mouseDistance) * 0.5;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#171717';
+          ctx.globalAlpha = opacity;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+          ctx.globalAlpha = 1;
+        }
+      });
+
+      animationId = requestAnimationFrame(animate);
+    };
+
+    // Event listeners
+    const handleMouseMove = (e: MouseEvent) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    };
+
+    const handleMouseLeave = () => {
+      mouse.x = -1000;
+      mouse.y = -1000;
+    };
+
+    // Visibility check
+    const handleVisibility = () => {
+      if (document.hidden) {
+        isActive = false;
+        cancelAnimationFrame(animationId);
+      } else {
+        isActive = true;
+        animate();
+      }
+    };
+
+    // Init
+    resize();
+    createParticles();
+    animate();
+
+    window.addEventListener('resize', () => {
+      resize();
+      createParticles();
+    });
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseleave', handleMouseLeave);
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    // Cleanup on page navigation (Astro)
+    document.addEventListener('astro:before-swap', () => {
+      isActive = false;
+      cancelAnimationFrame(animationId);
+      window.removeEventListener('resize', resize);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseleave', handleMouseLeave);
+      document.removeEventListener('visibilitychange', handleVisibility);
+    });
+  };
+
+  // Init
+  initParticles();
+  
+  // Re-init on view transitions
+  document.addEventListener('astro:page-load', initParticles);
+</script>

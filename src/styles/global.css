@@ -164,10 +164,17 @@ a.external-link::after {
 
 /* ===== Layout ===== */
 .container {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: var(--container-max);
   margin: 0 auto;
   padding: 0 1.5rem;
+}
+
+header {
+  position: relative;
+  z-index: 2;
 }
 
 main {

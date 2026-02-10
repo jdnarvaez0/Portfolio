@@ -9,7 +9,7 @@ import { getAllProjects, getAllTags } from "../../data/projects";
 import { t } from "../../i18n/translations";
 
 const lang = "en";
-const projects = getAllProjects();
+const projects = getAllProjects().slice(0, 2);
 const tags = getAllTags();
 
 // Get project count

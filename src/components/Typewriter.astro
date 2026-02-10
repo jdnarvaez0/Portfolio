@@ -1,0 +1,123 @@
+---
+/**
+ * Typewriter - Efecto de máquina de escribir
+ */
+interface Props {
+  text: string;
+  speed?: number; // ms entre caracteres
+  delay?: number; // ms antes de empezar
+  showCursor?: boolean;
+  cursorChar?: string;
+  class?: string;
+  hideCursorOnFinish?: boolean;
+  onFinish?: string; // callback name for coordination
+}
+
+const { 
+  text, 
+  speed = 80, 
+  delay = 300,
+  showCursor = true,
+  cursorChar = "|",
+  class: className = "",
+  hideCursorOnFinish = false,
+  onFinish
+} = Astro.props;
+---
+
+<span 
+  class={`typewriter ${className}`} 
+  data-text={text} 
+  data-speed={speed} 
+  data-delay={delay}
+  data-hide-cursor={hideCursorOnFinish}
+  data-on-finish={onFinish}
+>
+  <span class="typewriter-text"></span>
+  {showCursor && <span class="typewriter-cursor">{cursorChar}</span>}
+</span>
+
+<style>
+  .typewriter {
+    display: inline;
+  }
+
+  .typewriter-text {
+    white-space: pre-wrap;
+  }
+
+  .typewriter-cursor {
+    display: inline-block;
+    color: var(--accent);
+    animation: blink 1s step-end infinite;
+    margin-left: 1px;
+  }
+
+  .typewriter-cursor.typing {
+    animation: none;
+  }
+
+  .typewriter-cursor.hidden {
+    display: none;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+</style>
+
+<script>
+  // Coordination between typewriters
+  const typewriterCallbacks: Record<string, (() => void)[]> = {};
+
+  function initTypewriters() {
+    const typewriters = document.querySelectorAll('.typewriter');
+    
+    typewriters.forEach((el) => {
+      const htmlEl = el as HTMLElement;
+      const text = htmlEl.dataset.text || '';
+      const speed = parseInt(htmlEl.dataset.speed || '80');
+      const delay = parseInt(htmlEl.dataset.delay || '300');
+      const hideCursor = htmlEl.dataset.hideCursor === 'true';
+      const onFinish = htmlEl.dataset.onFinish;
+      const textSpan = htmlEl.querySelector('.typewriter-text');
+      const cursor = htmlEl.querySelector('.typewriter-cursor');
+      
+      if (!textSpan) return;
+
+      let i = 0;
+      
+      const startTyping = () => {
+        cursor?.classList.add('typing');
+        
+        const typeChar = () => {
+          if (i < text.length) {
+            textSpan.textContent += text.charAt(i);
+            i++;
+            setTimeout(typeChar, speed);
+          } else {
+            cursor?.classList.remove('typing');
+            if (hideCursor) {
+              cursor?.classList.add('hidden');
+            }
+            // Trigger callbacks
+            if (onFinish && typewriterCallbacks[onFinish]) {
+              typewriterCallbacks[onFinish].forEach(cb => cb());
+            }
+          }
+        };
+        
+        typeChar();
+      };
+      
+      setTimeout(startTyping, delay);
+    });
+  }
+
+  // Run on page load
+  initTypewriters();
+  
+  // Run on view transitions (Astro)
+  document.addEventListener('astro:page-load', initTypewriters);
+</script>
