@@ -1,43 +1,110 @@
-# Astro Starter Kit: Minimal
+# jnarvaez.dev
 
-```sh
-npm create astro@latest -- --template minimal
+Mi portfolio personal construido con [Astro](https://astro.build).
+
+🌐 **Live:** [https://juannarvaez.dev](https://juannarvaez.dev)
+
+## 🚀 Tecnologías
+
+- **Framework:** Astro 5.x
+- **Lenguaje:** TypeScript
+- **Estilos:** CSS personalizado (sin frameworks CSS)
+- **i18n:** Soporte multilingüe (Inglés/Español)
+- **Features:**
+  - Modo oscuro/claro con persistencia
+  - Transiciones de vista (View Transitions)
+  - Animaciones de partículas interactivas
+  - Typewriter effect en el hero
+  - Spotlight hover effect en tarjetas de proyectos
+  - Blog con soporte Markdown
+  - Sitemap XML generado automáticamente
+
+## 📁 Estructura del Proyecto
+
 ```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
 /
-├── public/
+├── public/              # Archivos estáticos
+│   ├── favicon.svg
+│   └── robots.txt
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── components/      # Componentes Astro
+│   │   ├── Header.astro
+│   │   ├── Hero.astro
+│   │   ├── ProjectCard.astro
+│   │   ├── ExperienceCard.astro
+│   │   ├── PostCard.astro
+│   │   ├── ThemeToggle.astro
+│   │   ├── LanguageToggle.astro
+│   │   ├── Particles.astro
+│   │   └── HeroTypewriter.astro
+│   ├── content/         # Contenido del blog (Markdown)
+│   │   └── blog/
+│   ├── data/            # Datos estáticos
+│   │   └── projects.ts
+│   ├── i18n/            # Traducciones
+│   │   └── translations.ts
+│   ├── layouts/         # Layouts
+│   │   ├── BaseLayout.astro
+│   │   └── PostLayout.astro
+│   ├── lib/             # Utilidades
+│   │   └── icons.ts
+│   ├── pages/           # Rutas
+│   │   ├── index.astro          # Home (EN)
+│   │   ├── es/                  # Versión en español
+│   │   ├── projects/
+│   │   └── posts/
+│   └── styles/
+│       └── global.css
+├── astro.config.mjs
+├── package.json
+└── tsconfig.json
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 📝 Scripts
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+| Comando           | Acción                                           |
+| :---------------- | :----------------------------------------------- |
+| `npm install`     | Instala dependencias                             |
+| `npm run dev`     | Inicia servidor local en `localhost:4321`        |
+| `npm run build`   | Construye el sitio para producción (`./dist/`)   |
+| `npm run preview` | Previsualiza el build localmente                 |
 
-Any static assets, like images, can be placed in the `public/` directory.
+## 🎨 Características de Diseño
 
-## 🧞 Commands
+- **Minimalista:** Interfaz limpia sin distracciones
+- **Tipografía:** Plus Jakarta Sans
+- **Paleta de colores:** Modo claro/oscuro con transiciones suaves
+- **Responsive:** Adaptado para todos los dispositivos
+- **Accesibilidad:** Skip links, focus visible, contraste adecuado
 
-All commands are run from the root of the project, from a terminal:
+## 🌍 Internacionalización (i18n)
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+El sitio soporta dos idiomas:
+- 🇺🇸 Inglés (default) - `/`
+- 🇪🇸 Español - `/es`
 
-## 👀 Want to learn more?
+Las traducciones se encuentran en `src/i18n/translations.ts`.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## 📝 Blog
+
+Los posts se escriben en Markdown y se almacenan en `src/content/blog/`.
+
+Frontmatter soportado:
+```yaml
+---
+title: "Título del post"
+description: "Descripción breve"
+date: 2026-01-15
+tags: ["Tag1", "Tag2"]
+lang: en        # 'en' o 'es'
+draft: false    # true para ocultar el post
+---
+```
+
+## 📄 Licencia
+
+MIT - Libre para usar y modificar.
+
+---
+
+Desarrollado con ❤️ por [Juan Narvaez](https://juannarvaez.dev)

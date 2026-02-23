@@ -48,7 +48,8 @@
     let particles: Particle[] = [];
     let mouse = { x: -1000, y: -1000 };
     let animationId: number;
-    let isActive = true;
+    let isActive = false; // Start inactive, will be activated by intersection observer
+    let isVisible = false;
 
     // Resize
     const resize = () => {
@@ -119,7 +120,7 @@
 
     // Animación
     const animate = () => {
-      if (!isActive) return;
+      if (!isActive || !isVisible) return;
       
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -172,21 +173,38 @@
       mouse.y = -1000;
     };
 
-    // Visibility check
+    // Visibility check (tab switching)
     const handleVisibility = () => {
       if (document.hidden) {
         isActive = false;
         cancelAnimationFrame(animationId);
-      } else {
+      } else if (isVisible) {
         isActive = true;
         animate();
       }
     };
 
+    // Intersection Observer for lazy loading
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        isVisible = entry.isIntersecting;
+        if (isVisible) {
+          isActive = true;
+          animate();
+        } else {
+          isActive = false;
+          cancelAnimationFrame(animationId);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '100px'
+    });
+
     // Init
     resize();
     createParticles();
-    animate();
+    observer.observe(canvas);
 
     window.addEventListener('resize', () => {
       resize();
@@ -199,7 +217,9 @@
     // Cleanup on page navigation (Astro)
     document.addEventListener('astro:before-swap', () => {
       isActive = false;
+      isVisible = false;
       cancelAnimationFrame(animationId);
+      observer.disconnect();
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);

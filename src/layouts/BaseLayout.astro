@@ -6,13 +6,18 @@ interface Props {
   title: string;
   description?: string;
   lang?: 'en' | 'es';
+  image?: string;
 }
 
 const { 
   title, 
   description = 'Juan Narvaez - Software Engineer from Buenos Aires, Argentina',
-  lang = 'en' 
+  lang = 'en',
+  image = '/og-image.png'
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(image, Astro.site);
 ---
 
 <!DOCTYPE html>
@@ -22,16 +27,34 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="author" content="Juan Narvaez" />
+    <meta name="keywords" content="Juan Narvaez, Software Engineer, Backend Developer, Node.js, Python, TypeScript, Argentina, Buenos Aires, API, PostgreSQL, Docker, NestJS, FastAPI" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#171717" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:locale" content={lang === 'es' ? 'es_ES' : 'en_US'} />
+    <meta property="og:site_name" content="Juan Narvaez" />
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+    <meta name="twitter:creator" content="@jdnarvaez_" />
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -48,18 +71,51 @@ const {
     </script>
   </head>
   <body>
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-link">
+      {lang === 'es' ? 'Saltar al contenido' : 'Skip to content'}
+    </a>
+    
+    <!-- Page loader indicator -->
+    <div id="page-loader" class="page-loader" aria-hidden="true"></div>
+    
     <slot />
+    
+    <script>
+      // Page loader functionality
+      function setupPageLoader() {
+        const loader = document.getElementById('page-loader');
+        if (!loader) return;
+        
+        // Show loader on navigation start
+        document.addEventListener('astro:before-preparation', () => {
+          loader.classList.add('loading');
+        });
+        
+        // Hide loader when page is ready
+        document.addEventListener('astro:page-load', () => {
+          loader.classList.remove('loading');
+        });
+        
+        // Hide on error
+        document.addEventListener('astro:error', () => {
+          loader.classList.remove('loading');
+        });
+      }
+      
+      setupPageLoader();
+    </script>
+    
+    <script>
+      // Re-apply theme after view transitions
+      document.addEventListener('astro:after-swap', () => {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      });
+    </script>
   </body>
 </html>
-
-<script>
-  // Re-apply theme after view transitions
-  document.addEventListener('astro:after-swap', () => {
-    const theme = localStorage.getItem('theme');
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  });
-</script>

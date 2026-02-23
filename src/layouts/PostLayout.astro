@@ -30,7 +30,7 @@ const backText = lang === 'es' ? '← Volver' : '← Back';
 
 <BaseLayout title={`${frontmatter.title} | Juan Narvaez`} description={frontmatter.description} lang={lang}>
   <Header />
-  <main class="container">
+  <main id="main-content" class="container">
     <article class="post">
       <header class="post-header">
         <a href={backUrl} class="back-link">{backText}</a>

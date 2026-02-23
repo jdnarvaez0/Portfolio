@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OG Image Template - Juan Narvaez</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #171717;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* OG Image Container - 1200x630 */
+    .og-image {
+      width: 1200px;
+      height: 630px;
+      background: linear-gradient(135deg, #171717 0%, #1f1f1f 50%, #262626 100%);
+      border-radius: 16px;
+      padding: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative elements */
+    .og-image::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(120, 119, 198, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .og-image::after {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      left: -100px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(120, 119, 198, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    /* Grid pattern overlay */
+    .grid-pattern {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    /* Content */
+    .content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .name {
+      font-size: 72px;
+      font-weight: 700;
+      color: #f5f5f5;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+
+    .title {
+      font-size: 36px;
+      font-weight: 500;
+      color: #d1d5db;
+      margin-bottom: 24px;
+    }
+
+    .location {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 24px;
+      color: #737373;
+    }
+
+    .location svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Bottom section */
+    .bottom {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .tech-stack {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tech-tag {
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      font-size: 18px;
+      font-weight: 500;
+      color: #f5f5f5;
+    }
+
+    .url {
+      font-size: 24px;
+      font-weight: 600;
+      color: #7877c6;
+    }
+
+    /* Instructions overlay */
+    .instructions {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      color: #171717;
+      padding: 16px 24px;
+      border-radius: 12px;
+      font-size: 14px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      z-index: 100;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    .instructions h3 {
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .instructions ol {
+      text-align: left;
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+
+    .instructions li {
+      margin-bottom: 4px;
+    }
+
+    .capture-btn {
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: #171717;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    /* Hide instructions when printing/saving */
+    @media print {
+      .instructions {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="instructions">
+    <h3>📸 Cómo guardar la imagen OG</h3>
+    <ol>
+      <li>Usa Chrome/Edge y abre DevTools (F12)</li>
+      <li>Presiona Ctrl+Shift+P y escribe "Capture screenshot"</li>
+      <li>Se guardará como PNG de 1200x630px</li>
+      <li>Guárdalo como <code>public/og-image.png</code></li>
+    </ol>
+    <p><strong>O:</strong> Usa <a href="https://www.screenshotmachine.com/" target="_blank">Screenshot Machine</a> con URL de este archivo</p>
+    <button class="capture-btn" onclick="hideInstructions()">Ocultar instrucciones</button>
+  </div>
+
+  <div class="og-image" id="og-image">
+    <div class="grid-pattern"></div>
+    
+    <div class="content">
+      <h1 class="name">Juan Narvaez</h1>
+      <p class="title">Software Engineer</p>
+      <div class="location">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+        Buenos Aires, Argentina
+      </div>
+    </div>
+
+    <div class="bottom">
+      <div class="tech-stack">
+        <span class="tech-tag">Node.js</span>
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">TypeScript</span>
+        <span class="tech-tag">PostgreSQL</span>
+      </div>
+      <div class="url">juannarvaez.dev</div>
+    </div>
+  </div>
+
+  <script>
+    function hideInstructions() {
+      document.querySelector('.instructions').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

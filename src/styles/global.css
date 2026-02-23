@@ -3,6 +3,75 @@
 /* Font Import - Plus Jakarta Sans */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
+/* ===== Skip Link (Accessibility) ===== */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: var(--bg-primary);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 0 0 8px 8px;
+  z-index: 9999;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ===== Page Loader ===== */
+.page-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+  z-index: 9999;
+}
+
+.page-loader.loading {
+  transform: scaleX(0.3);
+  animation: loading-progress 2s ease-in-out infinite;
+}
+
+@keyframes loading-progress {
+  0% { transform: scaleX(0.3) translateX(-100%); }
+  50% { transform: scaleX(0.3) translateX(0%); }
+  100% { transform: scaleX(0.3) translateX(100%); }
+}
+
+/* ===== Enhanced Focus Visible ===== */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Remove outline for mouse users but keep for keyboard */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Ensure interactive elements have visible focus */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 /* ===== CSS Variables ===== */
 :root {
   /* Colors - Light Mode */

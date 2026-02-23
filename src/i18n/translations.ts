@@ -105,6 +105,14 @@ export function t(lang: Lang, key: string): string {
         value = value?.[k];
     }
 
+    // Fallback to English if translation not found in current language
+    if (!value && lang !== 'en') {
+        value = translations['en'];
+        for (const k of keys) {
+            value = value?.[k];
+        }
+    }
+
     return value ?? key;
 }
 

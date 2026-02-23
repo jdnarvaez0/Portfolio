@@ -24,7 +24,7 @@ const description = t(lang, "hero.description");
   .hero {
     padding: 2rem 0 2rem;
     margin-bottom: 2.5rem;
-    min-height: 120px;
+    min-height: 150px;
   }
 
   .hero-text {
@@ -33,5 +33,18 @@ const description = t(lang, "hero.description");
     color: var(--text-secondary);
     max-width: 100%;
     text-align: left;
+    min-height: 4em;
+  }
+
+  @media (max-width: 640px) {
+    .hero {
+      min-height: 180px;
+    }
+    
+    .hero-text {
+      min-height: 5em;
+      font-size: 1.0625rem;
+      line-height: 1.8;
+    }
   }
 </style>
