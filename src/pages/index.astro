@@ -22,8 +22,8 @@ const sortedPosts = posts.sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
 );
 
-// Get featured projects
-const projects = getFeaturedProjects();
+// Get featured projects (with GitHub updated status)
+const projects = await getFeaturedProjects();
 
 // Experience data
 const experiences = [

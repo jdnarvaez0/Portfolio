@@ -5,11 +5,12 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../../components/Header.astro";
 import ProjectCard from "../../components/ProjectCard.astro";
-import { getAllProjects, getAllTags } from "../../data/projects";
+import { getProjects, getAllTags } from "../../data/projects";
 import { t } from "../../i18n/translations";
 
 const lang = "en";
-const projects = getAllProjects().slice(0, 2);
+const allProjects = await getProjects();
+const projects = allProjects.slice(0, 2);
 const tags = getAllTags();
 
 // Get project count

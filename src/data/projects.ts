@@ -1,10 +1,9 @@
 import { icons } from "../lib/icons";
+import { checkMultipleRepos, type RepoData } from "../lib/github";
 
 export interface Project {
   id: string;
   name: string;
-  // URL to project icon/image (can be emoji, SVG, or image URL)
-  icon?: string;
   emoji?: string;
   description: {
     en: string;
@@ -16,28 +15,20 @@ export interface Project {
     name: string;
     icon?: string;
   }[];
-  updated?: boolean;
+  updated?: boolean; // Will be auto-populated from GitHub API
   featured?: boolean;
+  lastCommitDate?: string;
 }
 
-// Project icons (simple SVGs or emojis)
-const projectIcons: Record<string, string> = {
-  gastiflow: `💰`,
-  farmaspot: `💊`,
-  telegram: `🤖`,
-  fastapi: `⚡`,
-  portfolio: `🌐`,
-  nestjs: `🛠️`,
-};
-
-export const projects: Project[] = [
+// Base project data (without updated status)
+const baseProjects: Omit<Project, 'updated' | 'lastCommitDate'>[] = [
   {
     id: "gastiflow",
     name: "Gastiflow",
     emoji: "💰",
     description: {
-      en: "Personal finance ecosystem with Telegram integration and AI-powered insights.",
-      es: "Ecosistema de finanzas personales con integración de Telegram y análisis con IA.",
+      en: "Personal finance app with Telegram integration and AI-powered insights.",
+      es: "App de finanzas personales con integración de Telegram y análisis con IA.",
     },
     github: "https://github.com/jdnarvaez0/gastiflow",
     url: "https://gastiflow.vercel.app",
@@ -46,7 +37,6 @@ export const projects: Project[] = [
       { name: "FastAPI", icon: icons.fastapi },
       { name: "Nuxt 3", icon: icons.vue },
     ],
-    updated: true,
     featured: true,
   },
   {
@@ -54,8 +44,8 @@ export const projects: Project[] = [
     name: "FarmaSpot",
     emoji: "💊",
     description: {
-      en: "Real-time pharmacy availability tracker for Argentina with geolocation features.",
-      es: "Rastreador de farmacias de turno en tiempo real para Argentina con geolocalización.",
+      en: "Real-time pharmacy availability tracker for Argentina.",
+      es: "Rastreador de farmacias de turno en tiempo real para Argentina.",
     },
     github: "https://github.com/jdnarvaez0/FarmaSpot",
     tags: [
@@ -126,17 +116,63 @@ export const projects: Project[] = [
   },
 ];
 
-export function getFeaturedProjects(): Project[] {
+// Cache for repo data to avoid multiple API calls
+let repoDataCache: Map<string, RepoData> | null = null;
+
+/**
+ * Fetch updated status from GitHub API
+ */
+async function fetchRepoData(): Promise<Map<string, RepoData>> {
+  if (repoDataCache) {
+    return repoDataCache;
+  }
+  
+  const reposWithGithub = baseProjects
+    .filter(p => p.github)
+    .map(p => ({ id: p.id, githubUrl: p.github! }));
+  
+  repoDataCache = await checkMultipleRepos(reposWithGithub);
+  return repoDataCache;
+}
+
+/**
+ * Get all projects with updated status from GitHub
+ */
+export async function getProjects(): Promise<Project[]> {
+  const repoData = await fetchRepoData();
+  
+  return baseProjects.map(project => {
+    const data = repoData.get(project.id);
+    return {
+      ...project,
+      updated: data?.updated ?? false,
+      lastCommitDate: data?.lastCommitDate,
+    };
+  });
+}
+
+/**
+ * Get featured projects
+ */
+export async function getFeaturedProjects(): Promise<Project[]> {
+  const projects = await getProjects();
   return projects.filter((p) => p.featured);
 }
 
+/**
+ * Get all projects (sync version for backwards compatibility)
+ * Note: This won't have the updated status, use getProjects() instead
+ */
 export function getAllProjects(): Project[] {
-  return projects;
+  return baseProjects.map(project => ({
+    ...project,
+    updated: false,
+  }));
 }
 
 export function searchProjects(query: string, lang: "en" | "es"): Project[] {
   const lowerQuery = query.toLowerCase();
-  return projects.filter(
+  return getAllProjects().filter(
     (p) =>
       p.name.toLowerCase().includes(lowerQuery) ||
       p.description[lang].toLowerCase().includes(lowerQuery) ||
@@ -146,6 +182,6 @@ export function searchProjects(query: string, lang: "en" | "es"): Project[] {
 
 export function getAllTags(): string[] {
   const tagSet = new Set<string>();
-  projects.forEach((p) => p.tags.forEach((t) => tagSet.add(t.name)));
+  baseProjects.forEach((p) => p.tags.forEach((t) => tagSet.add(t.name)));
   return Array.from(tagSet).sort();
 }
