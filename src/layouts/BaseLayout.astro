@@ -16,8 +16,10 @@ const {
   image = '/og-image.png'
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const ogImageURL = new URL(image, Astro.site);
+// Use the current origin for canonical URL, fallback to site config
+const siteURL = Astro.url.origin || Astro.site;
+const canonicalURL = new URL(Astro.url.pathname, siteURL);
+const ogImageURL = new URL(image, siteURL);
 ---
 
 <!DOCTYPE html>
