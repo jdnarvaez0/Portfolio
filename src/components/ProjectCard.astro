@@ -1,6 +1,6 @@
 ---
 /**
- * ProjectCard - Estilo exacto de pheralb.dev
+ * ProjectCard - Estilo exacto de pheralb.dev con efecto spotlight
  */
 interface Tag {
   name: string;
@@ -28,38 +28,54 @@ const {
   tags = [],
   updated = false,
 } = Astro.props;
+
+// Generate unique ID for this card
+const cardId = `project-card-${Math.random().toString(36).substr(2, 9)}`;
 ---
 
-<article class="project-card">
-  {/* Header: Icon + Title + Badge + GitHub */}
-  <div class="card-header">
-    <div class="project-title-row">
-      {/* Project Icon */}
-      <div class="project-icon">
-        {emoji ? (
-          <span class="icon-emoji">{emoji}</span>
-        ) : icon ? (
-          <span class="icon-svg" set:html={icon} />
-        ) : (
-          <span class="icon-emoji">📦</span>
-        )}
-      </div>
+<article 
+  class="project-card" 
+  id={cardId}
+  data-card-id={cardId}
+>
+  {/* Spotlight border effect */}
+  <input 
+    type="text" 
+    aria-hidden="true" 
+    class="spotlight-border"
+    readonly
+    tabindex="-1"
+  />
+  
+  {/* Spotlight glow effect */}
+  <div class="spotlight-glow"></div>
 
-      {/* Title with external link */}
+  {/* Content */}
+  <div class="card-content">
+    {/* Header */}
+    <div class="card-header">
       <div class="title-section">
+        {/* Icon */}
+        {emoji ? (
+          <span class="project-icon">{emoji}</span>
+        ) : icon ? (
+          <span class="project-icon-svg" set:html={icon} />
+        ) : null}
+
+        {/* Title */}
         {url ? (
           <a
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            class="project-name"
+            class="project-name group"
           >
-            {name}
+            <span>{name}</span>
             <svg 
               class="external-arrow" 
               xmlns="http://www.w3.org/2000/svg" 
-              width="14" 
-              height="14" 
+              width="13" 
+              height="13" 
               viewBox="0 0 24 24" 
               fill="none" 
               stroke="currentColor" 
@@ -67,9 +83,8 @@ const {
               stroke-linecap="round" 
               stroke-linejoin="round"
             >
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-              <polyline points="15,3 21,3 21,9"/>
-              <line x1="10" y1="14" x2="21" y2="3"/>
+              <path d="M7 7h10v10"/>
+              <path d="M7 17 17 7"/>
             </svg>
           </a>
         ) : (
@@ -77,149 +92,280 @@ const {
         )}
       </div>
 
-      {/* Updated badge */}
-      {updated && (
-        <span class="updated-badge">updated</span>
-      )}
+      <div class="actions">
+        {updated && (
+          <span class="spotlight-badge">updated</span>
+        )}
+        
+        {github && (
+          <a
+            href={github}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="github-link"
+            aria-label={`View ${name} repository on GitHub`}
+            title={`View ${name} repository on GitHub`}
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="16" 
+              height="16" 
+              viewBox="0 0 24 24" 
+              fill="currentColor"
+            >
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </a>
+        )}
+      </div>
     </div>
 
-    {/* GitHub Link */}
-    {github && (
-      <a
-        href={github}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="github-link"
-        aria-label={`View ${name} repository on GitHub`}
-        title={`View ${name} repository on GitHub`}
-      >
-        <svg 
-          xmlns="http://www.w3.org/2000/svg" 
-          width="20" 
-          height="20" 
-          viewBox="0 0 24 24" 
-          fill="currentColor"
-        >
-          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-        </svg>
-      </a>
+    {/* Description */}
+    <p class="project-description">{description}</p>
+
+    {/* Tags */}
+    {tags.length > 0 && (
+      <div class="project-tags">
+        {tags.map((tag) => (
+          <span class="tag">
+            {tag.icon && <span class="tag-icon" set:html={tag.icon} />}
+            <span class="tag-name">{tag.name}</span>
+          </span>
+        ))}
+      </div>
     )}
   </div>
-
-  {/* Description */}
-  <p class="project-description">{description}</p>
-
-  {/* Tags */}
-  {tags.length > 0 && (
-    <div class="project-tags">
-      {tags.map((tag) => (
-        <span class="tag">
-          {tag.icon && <span class="tag-icon" set:html={tag.icon} />}
-          <span class="tag-name">{tag.name}</span>
-        </span>
-      ))}
-    </div>
-  )}
 </article>
+
+<script>
+  // Spotlight effect for project cards
+  function initSpotlight() {
+    const cards = document.querySelectorAll('.project-card');
+    
+    cards.forEach((card) => {
+      const spotlightBorder = card.querySelector('.spotlight-border') as HTMLElement;
+      const spotlightGlow = card.querySelector('.spotlight-glow') as HTMLElement;
+      
+      if (!spotlightBorder || !spotlightGlow) return;
+      
+      let opacity = 0;
+      let position = { x: 0, y: 0 };
+      
+      const handleMouseMove = (e: MouseEvent) => {
+        const rect = card.getBoundingClientRect();
+        position = {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+        
+        // Update spotlight border
+        spotlightBorder.style.setProperty('--mouse-x', `${position.x}px`);
+        spotlightBorder.style.setProperty('--mouse-y', `${position.y}px`);
+        spotlightBorder.style.opacity = String(opacity);
+        
+        // Update spotlight glow
+        spotlightGlow.style.setProperty('--mouse-x', `${position.x}px`);
+        spotlightGlow.style.setProperty('--mouse-y', `${position.y}px`);
+        spotlightGlow.style.opacity = String(opacity);
+      };
+      
+      const handleMouseEnter = () => {
+        opacity = 1;
+        spotlightBorder.style.opacity = '1';
+        spotlightGlow.style.opacity = '1';
+      };
+      
+      const handleMouseLeave = () => {
+        opacity = 0;
+        spotlightBorder.style.opacity = '0';
+        spotlightGlow.style.opacity = '0';
+      };
+      
+      card.addEventListener('mousemove', handleMouseMove);
+      card.addEventListener('mouseenter', handleMouseEnter);
+      card.addEventListener('mouseleave', handleMouseLeave);
+      
+      // Cleanup on view transitions
+      document.addEventListener('astro:before-swap', () => {
+        card.removeEventListener('mousemove', handleMouseMove);
+        card.removeEventListener('mouseenter', handleMouseEnter);
+        card.removeEventListener('mouseleave', handleMouseLeave);
+      });
+    });
+  }
+  
+  // Initialize on load
+  initSpotlight();
+  
+  // Re-initialize after view transitions
+  document.addEventListener('astro:page-load', initSpotlight);
+</script>
 
 <style>
   .project-card {
-    background: var(--bg-card);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
     border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 16px;
-    transition: all 200ms ease;
+    padding: 16px 12px;
+    background: var(--bg-card);
+    overflow: hidden;
   }
 
-  .project-card:hover {
-    border-color: var(--border-color-hover);
+  /* Spotlight border effect */
+  .spotlight-border {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    height: 100%;
+    width: 100%;
+    cursor: default;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background-color: transparent;
+    opacity: 0;
+    transition: opacity 500ms ease;
+    pointer-events: none;
+    -webkit-mask-image: radial-gradient(
+      30% 30px at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+      black 45%, 
+      transparent
+    );
+    mask-image: radial-gradient(
+      30% 30px at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+      black 45%, 
+      transparent
+    );
+  }
+
+  :global(.dark) .spotlight-border {
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  :global(html:not(.dark)) .spotlight-border {
+    border-color: rgba(0, 0, 0, 0.5);
+  }
+
+  /* Spotlight glow effect */
+  .spotlight-glow {
+    position: absolute;
+    inset: -1px;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 300ms ease;
+    pointer-events: none;
+    background: radial-gradient(
+      600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+      rgba(120, 119, 198, 0.15), 
+      transparent 60%
+    );
+  }
+
+  /* Content */
+  .card-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
   /* Header */
   .card-header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 8px;
+    gap: 8px;
   }
 
-  .project-title-row {
+  .title-section {
     display: flex;
     align-items: center;
-    gap: 8px;
-    flex: 1;
+    gap: 10px;
     min-width: 0;
+    flex: 1;
   }
 
   /* Icon */
   .project-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
+    font-size: 20px;
+    line-height: 1;
     flex-shrink: 0;
   }
 
-  .icon-emoji {
-    font-size: 20px;
-    line-height: 1;
-  }
-
-  .icon-svg {
+  .project-icon-svg {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 20px;
     height: 20px;
+    flex-shrink: 0;
     color: var(--text-primary);
   }
 
-  .icon-svg :global(svg) {
+  .project-icon-svg :global(svg) {
     width: 20px;
     height: 20px;
   }
 
   /* Title */
-  .title-section {
-    min-width: 0;
-  }
-
   .project-name,
   .project-name-static {
     font-size: 15px;
     font-weight: 600;
     color: var(--text-primary);
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
   }
 
   .project-name {
     text-decoration: none;
-    transition: opacity 150ms ease;
+    text-decoration-color: var(--text-muted);
+    text-decoration-style: dotted;
+    text-underline-offset: 5px;
+    transition: all 150ms ease;
   }
 
   .project-name:hover {
-    opacity: 0.7;
+    text-decoration: underline;
   }
 
   .external-arrow {
     opacity: 0.5;
+    transition: all 200ms ease;
     flex-shrink: 0;
   }
 
-  /* Updated Badge */
-  .updated-badge {
+  .project-name:hover .external-arrow {
+    opacity: 1;
+    transform: translate(1.5px, -1.5px);
+  }
+
+  /* Actions */
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* Spotlight Badge */
+  .spotlight-badge {
     font-size: 11px;
     font-weight: 500;
-    padding: 2px 8px;
-    background: transparent;
-    border: 1px solid var(--border-color);
+    padding: 2px 10px;
+    background: rgba(120, 119, 198, 0.1);
+    border: 1px solid rgba(120, 119, 198, 0.3);
     border-radius: 9999px;
-    color: var(--text-muted);
-    flex-shrink: 0;
+    color: var(--text-secondary);
+  }
+
+  :global(.dark) .spotlight-badge {
+    background: rgba(120, 119, 198, 0.15);
+    border-color: rgba(120, 119, 198, 0.4);
   }
 
   /* GitHub Link */
@@ -227,42 +373,57 @@ const {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    opacity: 0.75;
+    transition: opacity 100ms ease;
     color: var(--text-muted);
-    border-radius: 6px;
-    transition: all 150ms ease;
-    flex-shrink: 0;
-    margin: -4px -4px -4px 0;
   }
 
   .github-link:hover {
+    opacity: 1;
     color: var(--text-primary);
-    background: var(--bg-primary);
   }
 
   /* Description */
   .project-description {
     font-size: 14px;
-    color: var(--text-secondary);
     line-height: 1.5;
-    margin: 0 0 12px 0;
+    color: var(--text-secondary);
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  :global(.dark) .project-description {
+    color: #a3a3a3;
   }
 
   /* Tags */
   .project-tags {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .project-tags::-webkit-scrollbar {
+    display: none;
   }
 
   .tag {
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    padding: 4px 10px;
     font-size: 12px;
     font-weight: 500;
     color: var(--text-secondary);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    white-space: nowrap;
   }
 
   .tag-icon {
@@ -277,9 +438,5 @@ const {
   .tag-icon :global(svg) {
     width: 14px;
     height: 14px;
-  }
-
-  .tag-name {
-    line-height: 1;
   }
 </style>
