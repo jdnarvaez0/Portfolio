@@ -236,7 +236,7 @@ a.external-link::after {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: var(--container-max);
+  max-width: 800px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
@@ -247,12 +247,12 @@ header {
 }
 
 main {
-  padding-top: 3rem;
+  padding-top: 2rem;
   padding-bottom: 4rem;
 }
 
 section {
-  margin-bottom: var(--section-gap);
+  margin-bottom: 3.5rem;
 }
 
 .section-header {

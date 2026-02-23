@@ -63,13 +63,19 @@ const experiences = [
     <Hero />
 
     <!-- Projects Section -->
-    <section id="projects">
+    <section id="projects" class="section">
       <div class="section-header">
         <h2 class="section-title">{t(lang, "sections.projects")}</h2>
-        <a href="/es/projects" class="section-link">{t(lang, "sections.more")}</a>
+        <a href="/es/projects" class="section-link">
+          {t(lang, "sections.more")}
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/>
+            <path d="m12 5 7 7-7 7"/>
+          </svg>
+        </a>
       </div>
 
-      <div class="grid-2">
+      <div class="projects-grid">
         {projects.map((project) => (
           <ProjectCard 
             name={project.name}
@@ -85,7 +91,7 @@ const experiences = [
     </section>
 
     <!-- Experience Section -->
-    <section id="experience">
+    <section id="experience" class="section">
       <div class="section-header">
         <h2 class="section-title">{t(lang, "sections.experience")}</h2>
       </div>
@@ -96,7 +102,7 @@ const experiences = [
     </section>
 
     <!-- Posts Section -->
-    <section id="posts">
+    <section id="posts" class="section">
       <div class="section-header">
         <h2 class="section-title">{t(lang, "sections.posts")}</h2>
       </div>
@@ -128,9 +134,55 @@ const experiences = [
 </BaseLayout>
 
 <style>
+  .section {
+    margin-bottom: 4rem;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .section-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+
+  .section-link:hover {
+    color: var(--text-primary);
+  }
+
+  /* Projects Grid - 2 columns like pheralb */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
   .experience-list {
     display: flex;
     flex-direction: column;
+    gap: 1.5rem;
   }
 
   .posts-list {

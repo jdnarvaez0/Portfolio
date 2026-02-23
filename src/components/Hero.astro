@@ -1,50 +1,41 @@
 ---
 /**
- * Hero - Presentation section with name and bio
+ * Hero - Simple y limpio como pheralb.dev
  */
 import { getLangFromUrl, t } from "../i18n/translations";
-import HeroTypewriter from "./HeroTypewriter.astro";
 
 const lang = getLangFromUrl(Astro.url);
 
-// Textos
-const greeting = t(lang, "hero.greeting");
-const name = t(lang, "hero.name");
 const description = t(lang, "hero.description");
 ---
 
 <section class="hero">
   <p class="hero-text">
-    <HeroTypewriter greeting={greeting} name={name} speed={90} delay={200} />,
     {description}
   </p>
 </section>
 
 <style>
   .hero {
-    padding: 2rem 0 2rem;
-    margin-bottom: 2.5rem;
-    min-height: 150px;
+    padding: 3rem 0 2rem;
+    margin-bottom: 2rem;
   }
 
   .hero-text {
-    font-size: 1rem;
-    line-height: 2;
+    font-size: 1.125rem;
+    line-height: 1.8;
     color: var(--text-secondary);
-    max-width: 100%;
-    text-align: left;
-    min-height: 4em;
+    max-width: 600px;
   }
 
   @media (max-width: 640px) {
     .hero {
-      min-height: 180px;
+      padding: 2rem 0 1.5rem;
     }
     
     .hero-text {
-      min-height: 5em;
-      font-size: 1.0625rem;
-      line-height: 1.8;
+      font-size: 1rem;
+      line-height: 1.7;
     }
   }
 </style>

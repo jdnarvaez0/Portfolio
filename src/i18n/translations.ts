@@ -4,7 +4,7 @@ export const translations = {
         hero: {
             greeting: "I'm",
             name: "Juan",
-            description: "a Software Engineer from Buenos Aires, Argentina with +3 years of experience. I love building solid backends, clean APIs, and contributing to solutions that combine well-structured code with real impact.",
+            description: "I'm Juan, a Software Engineer from Buenos Aires with +3 years of experience. I'm passionate about building solid backends, clean APIs, and open-source software.",
         },
         // Sections
         sections: {
@@ -51,7 +51,7 @@ export const translations = {
         hero: {
             greeting: "Soy",
             name: "Juan",
-            description: "Software Engineer de Buenos Aires, Argentina, con +3 años de experiencia. Me encanta construir backends sólidos, APIs limpias y contribuir a soluciones que combinen código bien estructurado con impacto real.",
+            description: "Soy Juan, Software Engineer de Buenos Aires con +3 años de experiencia. Me apasiona construir backends sólidos, APIs limpias y software open-source.",
         },
         // Sections
         sections: {

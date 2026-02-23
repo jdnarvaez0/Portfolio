@@ -1,6 +1,6 @@
 ---
 /**
- * ExperienceCard - Timeline-style experience display
+ * ExperienceCard - Timeline limpio como pheralb.dev
  */
 interface Props {
   startYear: string;
@@ -14,17 +14,25 @@ interface Props {
 const { startYear, endYear, title, company, companyUrl, description } = Astro.props;
 ---
 
-<article class="experience-card">
+<article class="experience-item">
   <div class="experience-timeline">
     <div class="timeline-dot"></div>
-    <span class="experience-date">{startYear} - {endYear || 'Present'}</span>
+    <div class="timeline-line"></div>
   </div>
   
   <div class="experience-content">
+    <div class="experience-meta">
+      <time class="experience-date">{startYear} — {endYear || 'Present'}</time>
+    </div>
     <h3 class="experience-title">{title}</h3>
     {companyUrl ? (
-      <a href={companyUrl} target="_blank" rel="noopener noreferrer" class="experience-company external-link">
+      <a href={companyUrl} target="_blank" rel="noopener noreferrer" class="experience-company">
         {company}
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+          <polyline points="15,3 21,3 21,9"/>
+          <line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
       </a>
     ) : (
       <span class="experience-company">{company}</span>
@@ -34,90 +42,97 @@ const { startYear, endYear, title, company, companyUrl, description } = Astro.pr
 </article>
 
 <style>
-  .experience-card {
+  .experience-item {
     display: flex;
-    gap: 1.5rem;
-    padding-left: 0.5rem;
+    gap: 1rem;
+    position: relative;
   }
-  
+
   .experience-timeline {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    width: 20px;
+    flex-shrink: 0;
     padding-top: 0.25rem;
   }
-  
+
   .timeline-dot {
-    width: 10px;
-    height: 10px;
-    border: 2px solid var(--border-color);
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    background: var(--bg-primary);
-    flex-shrink: 0;
+    background: var(--border-color);
+    border: 2px solid var(--bg-primary);
+    box-shadow: 0 0 0 1px var(--border-color);
   }
-  
-  .experience-date {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    white-space: nowrap;
+
+  .timeline-line {
+    width: 1px;
+    flex: 1;
+    background: var(--border-color);
+    margin-top: 0.5rem;
+    min-height: 20px;
   }
-  
+
+  .experience-item:last-child .timeline-line {
+    display: none;
+  }
+
   .experience-content {
     flex: 1;
     padding-bottom: 2rem;
-    border-left: 2px solid var(--border-color);
-    padding-left: 1.5rem;
-    margin-left: -1.25rem;
   }
-  
-  .experience-card:last-child .experience-content {
-    border-left-color: transparent;
+
+  .experience-item:last-child .experience-content {
     padding-bottom: 0;
   }
-  
+
+  .experience-meta {
+    margin-bottom: 0.25rem;
+  }
+
+  .experience-date {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
   .experience-title {
     font-size: 1rem;
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: 0.25rem;
   }
-  
+
   .experience-company {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
     font-size: 0.875rem;
     color: var(--text-muted);
-    display: inline-block;
-    margin-bottom: 0.75rem;
-  }
-  
-  a.experience-company {
     text-decoration: none;
+    margin-bottom: 0.75rem;
+    transition: color 150ms ease;
   }
-  
+
   a.experience-company:hover {
     color: var(--text-secondary);
   }
-  
+
   .experience-description {
     font-size: 0.875rem;
     color: var(--text-secondary);
     line-height: 1.6;
+    margin: 0;
   }
 
   @media (max-width: 640px) {
-    .experience-card {
-      flex-direction: column;
-      gap: 0.5rem;
+    .experience-item {
+      gap: 0.75rem;
     }
-    
-    .experience-timeline {
-      flex-direction: row;
-    }
-    
+
     .experience-content {
-      border-left: none;
-      padding-left: 0;
-      margin-left: 0;
+      padding-bottom: 1.5rem;
     }
   }
 </style>
