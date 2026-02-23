@@ -13,11 +13,18 @@ interface Props {
 const { siteTitle = "jnarvaez.dev" } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const homeUrl = lang === "es" ? "/es" : "/";
+const nowUrl = lang === 'es' ? '/es/now' : '/now';
+const nowLabel = lang === 'es' ? 'Ahora' : 'Now';
 ---
 
 <header class="header">
   <div class="container header-inner">
-    <a href={homeUrl} class="site-title">{siteTitle}</a>
+    <div class="header-left">
+      <a href={homeUrl} class="site-title">{siteTitle}</a>
+      <nav class="header-links">
+        <a href={nowUrl} class="header-link">{nowLabel}</a>
+      </nav>
+    </div>
 
     <nav class="header-nav">
       <!-- Social Links -->
@@ -114,6 +121,12 @@ const homeUrl = lang === "es" ? "/es" : "/";
     justify-content: space-between;
   }
 
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
   .site-title {
     font-size: 0.9375rem;
     font-weight: 600;
@@ -122,6 +135,24 @@ const homeUrl = lang === "es" ? "/es" : "/";
   }
 
   .site-title:hover {
+    color: var(--text-primary);
+  }
+
+  .header-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .header-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+
+  .header-link:hover {
     color: var(--text-primary);
   }
 

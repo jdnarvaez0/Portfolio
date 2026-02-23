@@ -1,0 +1,209 @@
+---
+/**
+ * Now Page - What I'm currently doing
+ * Inspired by https://nownownow.com/
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+
+const lang = "en";
+const lastUpdated = "February 2026";
+---
+
+<BaseLayout 
+  title="Now | Juan Narvaez"
+  description="What I'm currently working on, learning, and focused on right now."
+  lang={lang}
+>
+  <Header />
+
+  <main id="main-content" class="container">
+    <div class="page-header">
+      <h1 class="page-title">What I'm doing now</h1>
+      <p class="last-updated">Last updated: {lastUpdated}</p>
+    </div>
+
+    <div class="content">
+      <!-- Working On -->
+      <section class="section">
+        <h2 class="section-title">🛠️ Working on</h2>
+        <ul class="list">
+          <li>
+            <strong>Gastiflow v2.0</strong> — Personal finance ecosystem with Telegram 
+            integration and AI-powered insights. Rewriting the backend with better 
+            architecture and adding new features.
+          </li>
+          <li>
+            <strong>This portfolio</strong> — Continuously improving the design, 
+            adding new features, and writing blog posts about my learnings.
+          </li>
+          <li>
+            <strong>Open source contributions</strong> — Maintaining my Telegram bot 
+            template and FastAPI starter projects.
+          </li>
+        </ul>
+      </section>
+
+      <!-- Learning -->
+      <section class="section">
+        <h2 class="section-title">📚 Learning</h2>
+        <ul class="list">
+          <li>
+            <strong>System Design</strong> — Reading "Designing Data-Intensive Applications" 
+            and learning about distributed systems patterns.
+          </li>
+          <li>
+            <strong>Rust</strong> — Exploring Rust for high-performance backend services. 
+            Building small CLI tools to get comfortable with the language.
+          </li>
+          <li>
+            <strong>English</strong> — Improving my technical English to write better 
+            documentation and blog posts.
+          </li>
+        </ul>
+      </section>
+
+      <!-- Current Focus -->
+      <section class="section">
+        <h2 class="section-title">🎯 Current focus</h2>
+        <ul class="list">
+          <li>Building scalable and maintainable backend architectures</li>
+          <li>Writing clean, well-documented code</li>
+          <li>Contributing to open source projects</li>
+          <li>Sharing knowledge through blog posts</li>
+        </ul>
+      </section>
+
+      <!-- Reading -->
+      <section class="section">
+        <h2 class="section-title">📖 Reading</h2>
+        <ul class="list">
+          <li>"Designing Data-Intensive Applications" by Martin Kleppmann</li>
+          <li>"Clean Architecture" by Robert C. Martin</li>
+        </ul>
+      </section>
+
+      <!-- Location -->
+      <section class="section">
+        <h2 class="section-title">📍 Location</h2>
+        <p class="text">
+          Buenos Aires, Argentina. Open to remote opportunities worldwide.
+        </p>
+      </section>
+
+      <!-- Inspiration -->
+      <div class="inspiration">
+        <p>
+          <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer" class="link">
+            What is a "now" page?
+          </a>
+        </p>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+  }
+
+  .page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .last-updated {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .content {
+    padding-bottom: 4rem;
+  }
+
+  .section {
+    margin-bottom: 2.5rem;
+  }
+
+  .section-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  .list li {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    padding-left: 1.25rem;
+    position: relative;
+  }
+
+  .list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--text-muted);
+  }
+
+  .list li strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .text {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .inspiration {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .inspiration p {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .link {
+    color: var(--text-muted);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 150ms ease;
+  }
+
+  .link:hover {
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 640px) {
+    .page-header {
+      padding: 2rem 0 1.5rem;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+    }
+  }
+</style>

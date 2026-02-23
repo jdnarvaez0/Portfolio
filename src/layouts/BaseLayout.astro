@@ -1,6 +1,7 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
 import '../styles/global.css';
+import Footer from '../components/Footer.astro';
 
 interface Props {
   title: string;
@@ -87,6 +88,8 @@ const ogImageURL = new URL(image, siteURL);
     <div id="page-loader" class="page-loader" aria-hidden="true"></div>
     
     <slot />
+    
+    <Footer />
     
     <script>
       // Page loader functionality
