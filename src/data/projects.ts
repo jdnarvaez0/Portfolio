@@ -3,7 +3,9 @@ import { icons } from "../lib/icons";
 export interface Project {
   id: string;
   name: string;
-  emoji: string;
+  // URL to project icon/image (can be emoji, SVG, or image URL)
+  icon?: string;
+  emoji?: string;
   description: {
     en: string;
     es: string;
@@ -17,6 +19,16 @@ export interface Project {
   updated?: boolean;
   featured?: boolean;
 }
+
+// Project icons (simple SVGs or emojis)
+const projectIcons: Record<string, string> = {
+  gastiflow: `💰`,
+  farmaspot: `💊`,
+  telegram: `🤖`,
+  fastapi: `⚡`,
+  portfolio: `🌐`,
+  nestjs: `🛠️`,
+};
 
 export const projects: Project[] = [
   {
@@ -58,8 +70,8 @@ export const projects: Project[] = [
     name: "Telegram Bot Template",
     emoji: "🤖",
     description: {
-      en: "A scalable template for building Telegram bots with Python and python-telegram-bot.",
-      es: "Plantilla escalable para construir bots de Telegram con Python y python-telegram-bot.",
+      en: "A scalable template for building Telegram bots with Python.",
+      es: "Plantilla escalable para construir bots de Telegram con Python.",
     },
     github: "https://github.com/jdnarvaez0/telegram-bot-template",
     tags: [
@@ -72,8 +84,8 @@ export const projects: Project[] = [
     name: "FastAPI Starter",
     emoji: "⚡",
     description: {
-      en: "Production-ready FastAPI starter with JWT auth, SQLAlchemy, and async support.",
-      es: "Starter de FastAPI listo para producción con auth JWT, SQLAlchemy y soporte async.",
+      en: "Production-ready FastAPI starter with JWT auth and async support.",
+      es: "Starter de FastAPI listo para producción con auth JWT y soporte async.",
     },
     github: "https://github.com/jdnarvaez0/fastapi-starter",
     tags: [
@@ -87,8 +99,8 @@ export const projects: Project[] = [
     name: "Portfolio",
     emoji: "🌐",
     description: {
-      en: "Personal portfolio built with Astro, featuring i18n, dark mode, and modern animations.",
-      es: "Portfolio personal construido con Astro, con i18n, modo oscuro y animaciones modernas.",
+      en: "Personal portfolio built with Astro, featuring i18n and dark mode.",
+      es: "Portfolio personal construido con Astro, con i18n y modo oscuro.",
     },
     github: "https://github.com/jdnarvaez0/portfolio",
     url: "https://juannarvaez.dev",
@@ -102,8 +114,8 @@ export const projects: Project[] = [
     name: "NestJS Boilerplate",
     emoji: "🛠️",
     description: {
-      en: "Opinionated NestJS boilerplate with best practices, testing, and Docker setup.",
-      es: "Boilerplate de NestJS con mejores prácticas, testing y configuración Docker.",
+      en: "Opinionated NestJS boilerplate with best practices and testing.",
+      es: "Boilerplate de NestJS con mejores prácticas y testing.",
     },
     github: "https://github.com/jdnarvaez0/nestjs-boilerplate",
     tags: [

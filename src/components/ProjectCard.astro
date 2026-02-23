@@ -1,7 +1,6 @@
 ---
 /**
- * ProjectCard - Estilo pheralb.dev
- * Grid de 2 columnas, tags con iconos, diseño limpio
+ * ProjectCard - Estilo exacto de pheralb.dev
  */
 interface Tag {
   name: string;
@@ -32,21 +31,22 @@ const {
 ---
 
 <article class="project-card">
+  {/* Header: Icon + Title + Badge + GitHub */}
   <div class="card-header">
-    <div class="project-info">
-      <!-- Icon/Emoji -->
-      <div class="project-icon-wrapper">
+    <div class="project-title-row">
+      {/* Project Icon */}
+      <div class="project-icon">
         {emoji ? (
-          <span class="project-emoji">{emoji}</span>
+          <span class="icon-emoji">{emoji}</span>
         ) : icon ? (
-          <span class="project-icon" set:html={icon} />
+          <span class="icon-svg" set:html={icon} />
         ) : (
-          <span class="project-emoji">📦</span>
+          <span class="icon-emoji">📦</span>
         )}
       </div>
 
-      <!-- Title -->
-      <div class="title-wrapper">
+      {/* Title with external link */}
+      <div class="title-section">
         {url ? (
           <a
             href={url}
@@ -55,48 +55,67 @@ const {
             class="project-name"
           >
             {name}
-            <svg class="external-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg 
+              class="external-arrow" 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="14" 
+              height="14" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round"
+            >
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
               <polyline points="15,3 21,3 21,9"/>
               <line x1="10" y1="14" x2="21" y2="3"/>
             </svg>
           </a>
         ) : (
-          <span class="project-name-text">{name}</span>
+          <span class="project-name-static">{name}</span>
         )}
       </div>
-    </div>
 
-    <div class="card-actions">
-      {updated && <span class="badge-updated">updated</span>}
-      
-      {github && (
-        <a
-          href={github}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="github-link"
-          aria-label="View on GitHub"
-          title="View on GitHub"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-          </svg>
-        </a>
+      {/* Updated badge */}
+      {updated && (
+        <span class="updated-badge">updated</span>
       )}
     </div>
+
+    {/* GitHub Link */}
+    {github && (
+      <a
+        href={github}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="github-link"
+        aria-label={`View ${name} repository on GitHub`}
+        title={`View ${name} repository on GitHub`}
+      >
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          width="20" 
+          height="20" 
+          viewBox="0 0 24 24" 
+          fill="currentColor"
+        >
+          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+        </svg>
+      </a>
+    )}
   </div>
 
-  <!-- Description -->
+  {/* Description */}
   <p class="project-description">{description}</p>
 
-  <!-- Tags -->
+  {/* Tags */}
   {tags.length > 0 && (
     <div class="project-tags">
       {tags.map((tag) => (
-        <span class="tech-tag">
-          {tag.icon && <span class="tech-icon" set:html={tag.icon} />}
-          <span class="tech-name">{tag.name}</span>
+        <span class="tag">
+          {tag.icon && <span class="tag-icon" set:html={tag.icon} />}
+          <span class="tag-name">{tag.name}</span>
         </span>
       ))}
     </div>
@@ -108,112 +127,113 @@ const {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 12px;
-    padding: 1.25rem;
-    transition: border-color 200ms ease, transform 200ms ease;
+    padding: 16px;
+    transition: all 200ms ease;
   }
 
   .project-card:hover {
     border-color: var(--border-color-hover);
-    transform: translateY(-1px);
   }
 
+  /* Header */
   .card-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
+    gap: 12px;
+    margin-bottom: 8px;
   }
 
-  .project-info {
+  .project-title-row {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 8px;
+    flex: 1;
     min-width: 0;
   }
 
-  .project-icon-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    flex-shrink: 0;
-  }
-
-  .project-emoji {
-    font-size: 1.25rem;
-    line-height: 1;
-  }
-
+  /* Icon */
   .project-icon {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 24px;
     height: 24px;
+    flex-shrink: 0;
+  }
+
+  .icon-emoji {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .icon-svg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
     color: var(--text-primary);
   }
 
-  .project-icon :global(svg) {
-    width: 24px;
-    height: 24px;
+  .icon-svg :global(svg) {
+    width: 20px;
+    height: 20px;
   }
 
-  .title-wrapper {
+  /* Title */
+  .title-section {
     min-width: 0;
   }
 
   .project-name,
-  .project-name-text {
-    font-size: 1rem;
+  .project-name-static {
+    font-size: 15px;
     font-weight: 600;
     color: var(--text-primary);
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 4px;
   }
 
   .project-name {
     text-decoration: none;
-    transition: color 150ms ease;
+    transition: opacity 150ms ease;
   }
 
   .project-name:hover {
-    color: var(--text-secondary);
+    opacity: 0.7;
   }
 
-  .external-icon {
+  .external-arrow {
     opacity: 0.5;
     flex-shrink: 0;
   }
 
-  .card-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  /* Updated Badge */
+  .updated-badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 9999px;
+    color: var(--text-muted);
     flex-shrink: 0;
   }
 
-  .badge-updated {
-    font-size: 0.6875rem;
-    font-weight: 500;
-    padding: 0.125rem 0.5rem;
-    background: rgba(120, 119, 198, 0.15);
-    border: 1px solid rgba(120, 119, 198, 0.3);
-    border-radius: 9999px;
-    color: var(--text-secondary);
-  }
-
+  /* GitHub Link */
   .github-link {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     color: var(--text-muted);
     border-radius: 6px;
-    transition: color 150ms ease, background-color 150ms ease;
+    transition: all 150ms ease;
+    flex-shrink: 0;
+    margin: -4px -4px -4px 0;
   }
 
   .github-link:hover {
@@ -221,38 +241,31 @@ const {
     background: var(--bg-primary);
   }
 
+  /* Description */
   .project-description {
-    font-size: 0.875rem;
+    font-size: 14px;
     color: var(--text-secondary);
     line-height: 1.5;
-    margin: 0 0 1rem 0;
+    margin: 0 0 12px 0;
   }
 
+  /* Tags */
   .project-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 8px;
   }
 
-  .tech-tag {
+  .tag {
     display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
-    padding: 0.25rem 0.625rem;
-    font-size: 0.75rem;
+    gap: 4px;
+    font-size: 12px;
     font-weight: 500;
     color: var(--text-secondary);
-    background: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    transition: border-color 150ms ease;
   }
 
-  .tech-tag:hover {
-    border-color: var(--border-color-hover);
-  }
-
-  .tech-icon {
+  .tag-icon {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -261,12 +274,12 @@ const {
     flex-shrink: 0;
   }
 
-  .tech-icon :global(svg) {
+  .tag-icon :global(svg) {
     width: 14px;
     height: 14px;
   }
 
-  .tech-name {
+  .tag-name {
     line-height: 1;
   }
 </style>
