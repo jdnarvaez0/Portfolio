@@ -1,5 +1,4 @@
 import { icons } from "../lib/icons";
-import { checkMultipleRepos, type RepoData } from "../lib/github";
 
 export interface Project {
   id: string;
@@ -15,13 +14,11 @@ export interface Project {
     name: string;
     icon?: string;
   }[];
-  updated?: boolean; // Will be auto-populated from GitHub API
+  updated?: boolean;
   featured?: boolean;
-  lastCommitDate?: string;
 }
 
-// Base project data (without updated status)
-const baseProjects: Omit<Project, 'updated' | 'lastCommitDate'>[] = [
+export const projects: Project[] = [
   {
     id: "gastiflow",
     name: "Gastiflow",
@@ -37,6 +34,7 @@ const baseProjects: Omit<Project, 'updated' | 'lastCommitDate'>[] = [
       { name: "FastAPI", icon: icons.fastapi },
       { name: "Nuxt 3", icon: icons.vue },
     ],
+    updated: true,
     featured: true,
   },
   {
@@ -116,63 +114,17 @@ const baseProjects: Omit<Project, 'updated' | 'lastCommitDate'>[] = [
   },
 ];
 
-// Cache for repo data to avoid multiple API calls
-let repoDataCache: Map<string, RepoData> | null = null;
-
-/**
- * Fetch updated status from GitHub API
- */
-async function fetchRepoData(): Promise<Map<string, RepoData>> {
-  if (repoDataCache) {
-    return repoDataCache;
-  }
-  
-  const reposWithGithub = baseProjects
-    .filter(p => p.github)
-    .map(p => ({ id: p.id, githubUrl: p.github! }));
-  
-  repoDataCache = await checkMultipleRepos(reposWithGithub);
-  return repoDataCache;
-}
-
-/**
- * Get all projects with updated status from GitHub
- */
-export async function getProjects(): Promise<Project[]> {
-  const repoData = await fetchRepoData();
-  
-  return baseProjects.map(project => {
-    const data = repoData.get(project.id);
-    return {
-      ...project,
-      updated: data?.updated ?? false,
-      lastCommitDate: data?.lastCommitDate,
-    };
-  });
-}
-
-/**
- * Get featured projects
- */
-export async function getFeaturedProjects(): Promise<Project[]> {
-  const projects = await getProjects();
+export function getFeaturedProjects(): Project[] {
   return projects.filter((p) => p.featured);
 }
 
-/**
- * Get all projects (sync version for backwards compatibility)
- * Note: This won't have the updated status, use getProjects() instead
- */
 export function getAllProjects(): Project[] {
-  return baseProjects.map(project => ({
-    ...project,
-    updated: false,
-  }));
+  return projects;
 }
 
 export function searchProjects(query: string, lang: "en" | "es"): Project[] {
   const lowerQuery = query.toLowerCase();
-  return getAllProjects().filter(
+  return projects.filter(
     (p) =>
       p.name.toLowerCase().includes(lowerQuery) ||
       p.description[lang].toLowerCase().includes(lowerQuery) ||
@@ -182,6 +134,6 @@ export function searchProjects(query: string, lang: "en" | "es"): Project[] {
 
 export function getAllTags(): string[] {
   const tagSet = new Set<string>();
-  baseProjects.forEach((p) => p.tags.forEach((t) => tagSet.add(t.name)));
+  projects.forEach((p) => p.tags.forEach((t) => tagSet.add(t.name)));
   return Array.from(tagSet).sort();
 }
